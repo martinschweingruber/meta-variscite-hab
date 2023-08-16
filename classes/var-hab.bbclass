@@ -1,7 +1,7 @@
 # NXP CST Utils
 # Requires registration, download from https://www.nxp.com/webapp/sps/download/license.jsp?colCode=IMX_CST_TOOL
 # Override NXP_CST_URI in local.conf as needed
-NXP_CST_URI ?= "file://${HOME}/cst-3.1.0.tgz"
+NXP_CST_URI ?= "file://${HOME}/hab/cst-3.1.0.tgz"
 SRC_URI:append:hab = " ${NXP_CST_URI};name=cst;subdir=cst;"
 CST_BIN ?= "${WORKDIR}/cst/release/linux64/bin/cst"
 
