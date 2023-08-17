@@ -16,7 +16,7 @@ SRC_URI:append:hab = " \
 #SIGN_DTB:mx8qm-nxp-bsp ?= "${B}/${KERNEL_OUTPUT_DIR}/dts/freescale/imx8qm-var-som-symphony-lvds.dtb"
 #SIGN_DTB:mx8x-nxp-bsp ?= "${B}/${KERNEL_OUTPUT_DIR}/dts/freescale/imx8qxp-var-som-symphony-sd.dtb"
 
-LOAD_ADDR_KERNEL:mx8m-nxp-bsp ?= "0x40480000"
+LOAD_ADDR_KERNEL:mx8m-nxp-bsp ?= "0x40400000"
 LOAD_ADDR_DTB:mx8m-nxp-bsp ?= "0x43000000"
 LOAD_ADDR_KERNEL:mx8-nxp-bsp ?= "0x80200000"
 LOAD_ADDR_DTB:mx8-nxp-bsp ?= "0x83000000"
@@ -116,6 +116,8 @@ do_sign_kernel_habv4() {
     # Generate IVT:
     (cd ${WORKDIR} && ./var-genIVT ${LOAD_ADDR_KERNEL} `printf "0x%x" ${IMG_SIZE}`)
 
+    bbwarn "IMG SIZE: ${IMG_SIZE}, LOAD_ADDR_KERNEL: ${LOAD_ADDR_KERNEL}, LOAD_ADDR_DTB: ${LOAD_ADDR_DTB}"
+
     # Append the ivt.bin at the end of the padded Image:
     cat ${IMG}_pad ${WORKDIR}/ivt.bin > ${IMG}_pad_ivt
 
@@ -128,12 +130,18 @@ do_sign_kernel_habv4() {
     # Attach signature to Image_signed
 	cat ${IMG}_pad_ivt ${IMG}.csf.bin > ${IMG}_signed
 
+    # LAYOUT
+    # | KERNEL | IVT (see hexdump -C Image at offset 01f50000) | CSF |
+
+    # TODO, may ask for KERNEL_IMAGE_TYPE
+    # Create final signed Image
+    cp ${IMG}_signed ${IMG}
+
     # Create final signed Image.gz
     gzip -f ${IMG}_signed
     cp ${IMG}_signed.gz ${IMG}.gz
 
     bbwarn "SIGNED*** imx-kernel ${IMG}.gz, see ${IMG}.gz.uboot-cmds for manual auth"
-    
 
     # Manually authenticate:
     # u-boot> hab_auth_img ${IMG_ADDR} $filesize ${IMG_SIZE}
@@ -142,6 +150,7 @@ do_sign_kernel_habv4() {
     echo >> ${IMG}.gz.uboot-cmds
     echo "u-boot> tftp \${img_addr} ${IMG_NAME}.gz;unzip \${img_addr} \${loadaddr};" >> ${IMG}.gz.uboot-cmds
     echo "u-boot> hab_auth_img \${loadaddr} \$filesize ${IMG_SIZE}" >> ${IMG}.gz.uboot-cmds
+
 }
 
 # Empty function for when hab override not defined
