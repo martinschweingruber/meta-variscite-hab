@@ -1,0 +1,39 @@
+From 592bf3dda97c4c6ba96b450f91b0c830f7f19ed2 Mon Sep 17 00:00:00 2001
+From: martinschweingruber <martin.schweingruber@bytesatwork.ch>
+Date: Thu, 17 Aug 2023 16:34:12 +0200
+Subject: [PATCH] add HAB tools
+
+---
+ meta-bsp/recipes-bsp/u-boot/files/secureboot.cfg  | 1 +
+ meta-bsp/recipes-bsp/u-boot/u-boot-imx_2023.04.bb | 6 ++++++
+ 2 files changed, 7 insertions(+)
+ create mode 100644 meta-bsp/recipes-bsp/u-boot/files/secureboot.cfg
+
+diff --git a/meta-bsp/recipes-bsp/u-boot/files/secureboot.cfg b/meta-bsp/recipes-bsp/u-boot/files/secureboot.cfg
+new file mode 100644
+index 0000000000..9d6295aa79
+--- /dev/null
++++ b/meta-bsp/recipes-bsp/u-boot/files/secureboot.cfg
+@@ -0,0 +1 @@
++CONFIG_IMX_HAB=y
+\ No newline at end of file
+diff --git a/meta-bsp/recipes-bsp/u-boot/u-boot-imx_2023.04.bb b/meta-bsp/recipes-bsp/u-boot/u-boot-imx_2023.04.bb
+index b1d7af0269..ed7edbfd64 100644
+--- a/meta-bsp/recipes-bsp/u-boot/u-boot-imx_2023.04.bb
++++ b/meta-bsp/recipes-bsp/u-boot/u-boot-imx_2023.04.bb
+@@ -2,6 +2,12 @@
+ # Copyright 2018 (C) O.S. Systems Software LTDA.
+ # Copyright 2017-2023 NXP
+ 
++FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
++
++SRC_URI:append = " \
++  file://secureboot.cfg \
++"
++
+ require recipes-bsp/u-boot/u-boot.inc
+ require recipes-bsp/u-boot/u-boot-imx-common_${PV}.inc
+ 
+-- 
+2.39.2
+

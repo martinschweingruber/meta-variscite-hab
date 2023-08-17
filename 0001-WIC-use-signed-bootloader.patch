@@ -1,0 +1,25 @@
+From f0780aebe4e2cadbea2965d53ea42a3ccd5e351f Mon Sep 17 00:00:00 2001
+From: martinschweingruber <martin.schweingruber@bytesatwork.ch>
+Date: Thu, 17 Aug 2023 16:36:19 +0200
+Subject: [PATCH] WIC use signed bootloader
+
+---
+ wic/imx-imx-boot-bootpart.wks.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/wic/imx-imx-boot-bootpart.wks.in b/wic/imx-imx-boot-bootpart.wks.in
+index b50364d1..87d292c9 100644
+--- a/wic/imx-imx-boot-bootpart.wks.in
++++ b/wic/imx-imx-boot-bootpart.wks.in
+@@ -13,7 +13,7 @@
+ # 0 |        8MiB          72MiB          72MiB + rootfs + IMAGE_EXTRA_SPACE (default 10MiB)
+ #   ${IMX_BOOT_SEEK} 32 or 33kiB, see reference manual
+ #
+-part u-boot --source rawcopy --sourceparams="file=imx-boot" --ondisk mmcblk --no-table --align ${IMX_BOOT_SEEK}
++part u-boot --source rawcopy --sourceparams="file=imx-boot-imx8mm-lpddr4-evk-sd.bin-flash_evk" --ondisk mmcblk --no-table --align ${IMX_BOOT_SEEK}
+ part /boot --source bootimg-partition --ondisk mmcblk --fstype=vfat --label boot --active --align 8192 --size 64
+ part / --source rootfs --ondisk mmcblk --fstype=ext4 --label root --align 8192
+ 
+-- 
+2.39.2
+
