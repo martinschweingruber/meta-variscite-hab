@@ -13,8 +13,8 @@ SRC_URI:append:hab = " \
 # Define SIGN_DTB to authenticate device tree
 # Optional: imx8m family
 # Required: imx8qm and imx8qxp
-SIGN_DTB:mx8qm-nxp-bsp ?= "${B}/${KERNEL_OUTPUT_DIR}/dts/freescale/imx8qm-var-som-symphony-lvds.dtb"
-SIGN_DTB:mx8x-nxp-bsp ?= "${B}/${KERNEL_OUTPUT_DIR}/dts/freescale/imx8qxp-var-som-symphony-sd.dtb"
+#SIGN_DTB:mx8qm-nxp-bsp ?= "${B}/${KERNEL_OUTPUT_DIR}/dts/freescale/imx8qm-var-som-symphony-lvds.dtb"
+#SIGN_DTB:mx8x-nxp-bsp ?= "${B}/${KERNEL_OUTPUT_DIR}/dts/freescale/imx8qxp-var-som-symphony-sd.dtb"
 
 LOAD_ADDR_KERNEL:mx8m-nxp-bsp ?= "0x40480000"
 LOAD_ADDR_DTB:mx8m-nxp-bsp ?= "0x43000000"
@@ -131,6 +131,9 @@ do_sign_kernel_habv4() {
     # Create final signed Image.gz
     gzip -f ${IMG}_signed
     cp ${IMG}_signed.gz ${IMG}.gz
+
+    bbwarn "SIGNED*** imx-kernel ${IMG}.gz, see ${IMG}.gz.uboot-cmds for manual auth"
+    
 
     # Manually authenticate:
     # u-boot> hab_auth_img ${IMG_ADDR} $filesize ${IMG_SIZE}

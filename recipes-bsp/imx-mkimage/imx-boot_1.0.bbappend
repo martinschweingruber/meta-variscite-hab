@@ -18,8 +18,8 @@ SRC_URI:append:hab = " \
     "
 
 UBOOT_DTBS ?= "${UBOOT_DTB_NAME}"
-UBOOT_DTBS:mx8mm-nxp-bsp ?= "imx8mm-var-dart-customboard.dtb imx8mm-var-som-symphony.dtb"
-UBOOT_DTBS:mx8mp-nxp-bsp ?= "imx8mp-var-dart-dt8mcustomboard.dtb imx8mp-var-dart-dt8mcustomboard-legacy.dtb imx8mp-var-som-symphony.dtb"
+UBOOT_DTBS:mx8mm-nxp-bsp ?= "imx8mm-evk-imx8mm-lpddr4-evk.dtb"
+#UBOOT_DTBS:mx8mp-nxp-bsp ?= "imx8mp-var-dart-dt8mcustomboard.dtb imx8mp-var-dart-dt8mcustomboard-legacy.dtb imx8mp-var-som-symphony.dtb"
 UBOOT_DTBS_TARGET ?= "dtbs"
 
 # Name of the image to include in final image
@@ -87,6 +87,8 @@ sign_flash_habv4() {
     # Insert SPL and FIT Signatures
     dd if=${WORKDIR}/${TARGET}-csf-spl.bin of=${IMG_SIGNED} seek=$(printf "%d" ${offset_spl}) bs=1 conv=notrunc
     dd if=${WORKDIR}/${TARGET}-csf-fit.bin of=${IMG_SIGNED} seek=$(printf "%d" ${offset_fit}) bs=1 conv=notrunc
+
+    bbwarn "SIGNED*** imx-boot ${IMG_SIGNED}"
 }
 
 do_deploy:append:hab() {
@@ -100,6 +102,7 @@ do_deploy:append:hab() {
                 DTB_SUFFIX=""
             fi
             # Deploy signed imx-boot image for each U-Boot Device Tree
+            bbwarn "DEPLOY*** ${DEPLOYDIR}/${BOOT_CONFIG_MACHINE}-${target}${DTB_SUFFIX}"
             install -m 0644 ${S}/${BOOT_CONFIG_MACHINE}-${target}${DTB_SUFFIX}-signed \
                 ${DEPLOYDIR}/${BOOT_CONFIG_MACHINE}-${target}${DTB_SUFFIX}
         done
