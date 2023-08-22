@@ -25,8 +25,8 @@ UBOOT_DTBS_TARGET ?= "dtbs"
 # Name of the image to include in final image
 # e.g. imx-boot-imx8mn-var-som-sd.bin-flash_ddr4_evk-signed
 UBOOT_DTB_DEFAULT ?= ""
-UBOOT_DTB_DEFAULT:mx8mm-nxp-bsp ?= "-imx8mm-var-som-symphony"
-UBOOT_DTB_DEFAULT:mx8mp-nxp-bsp ?= "-imx8mp-var-som-symphony"
+#UBOOT_DTB_DEFAULT:mx8mm-nxp-bsp ?= "-imx8mm-var-som-symphony"
+#UBOOT_DTB_DEFAULT:mx8mp-nxp-bsp ?= "-imx8mp-var-som-symphony"
 
 sign_uboot_atf_container_ahab() {
     TARGET=$1
